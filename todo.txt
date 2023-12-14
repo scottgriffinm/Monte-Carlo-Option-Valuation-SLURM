@@ -1,0 +1,27 @@
+
+o try far-itm, itm, atm, otm, far otm
+    - at what number of simulations does each simulation result match BS to 2 decimal places
+
+o time differences at different simulation sizes
+
+o pregenerate random numbers
+
+
+Time comparisons by simulation sizes, each matching BS to different decimal places.
+
+
+Simulation sizes:
+    a -> match BS to dollar amount = 800 simulations
+    b -> match BS to one decimal place
+    c -> match BS to two decimal places
+    d -> match BS to three decimal places
+    e -> match BS to four decimal places
+    f -> match BS to five decimal places
+
+
+
+
+
+
+
+
