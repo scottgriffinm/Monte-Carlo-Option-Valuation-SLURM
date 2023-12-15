@@ -1,7 +1,7 @@
 import numpy as np
 import sys
 
-def mc_euro_call_worker(S, K, r, sigma, q, T, n, M):
+def mc_euro_call_worker(S, K, r, sigma, q, T, worker_simulations, total_simulations):
     drift = (r - q - 0.5 * sigma**2) * T
     sig_sqrt_t = sigma * np.sqrt(T)
     up_change = np.log(1.01)
@@ -9,8 +9,8 @@ def mc_euro_call_worker(S, K, r, sigma, q, T, n, M):
     sum_call = 0
     sum_call_change = 0
     sum_pathwise = 0
-    random_numbers = np.random.randn(M)
-    for i in range(n):
+    random_numbers = np.random.randn(total_simulations)
+    for i in range(worker_simulations):
         log_st = np.log(S) + drift + sig_sqrt_t * random_numbers[i]
         call_val = max(0, np.exp(log_st) - K)
         sum_call += call_val
@@ -21,7 +21,7 @@ def mc_euro_call_worker(S, K, r, sigma, q, T, n, M):
         sum_call_change += call_vu - call_vd
         if np.exp(log_st) > K:
             sum_pathwise += (np.exp(log_st) / S)
-    return sum_call/M
+    return sum_call/total_simulations
 
 if __name__ == "__main__":
     S = float(sys.argv[1])
@@ -30,9 +30,9 @@ if __name__ == "__main__":
     sigma = float(sys.argv[4])
     q = float(sys.argv[5])
     T = int(sys.argv[6])
-    n = int(sys.argv[7])
-    M = int(sys.argv[8])
-    print(mc_euro_call_worker(S, K, r, sigma, q, T, n, M))
+    worker_simulations = int(sys.argv[7])
+    total_simulations = int(sys.argv[8])
+    print(mc_euro_call_worker(S, K, r, sigma, q, T, worker_simulations, total_simulations))
 
 
 
