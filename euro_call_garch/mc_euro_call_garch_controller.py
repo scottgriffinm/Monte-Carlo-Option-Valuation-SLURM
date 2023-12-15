@@ -3,7 +3,7 @@ import subprocess
 
 def mc_euro_call_garch_controller(S, K, r, sigma0, q, T, N, kappa, theta, lambda_, total_simulations, workers):
 	if total_simulations % workers != 0:
-		total_simulations = total_simulations + (workers - total_simulations % workers)
+		total_simulations += (workers - total_simulations % workers)
 		print(f"Total number of simulations adjusted to {total_simulations} to be evenly divisible by {workers} workers.")
 	worker_simulations = int(total_simulations/workers)
 	worker_commands = [S, K, r, sigma0, q, T, N, kappa, theta, lambda_, worker_simulations, total_simulations]

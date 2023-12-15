@@ -3,7 +3,7 @@ import subprocess
 
 def mc_euro_down_and_out_call_controller(S, K, r, sigma, q, T, H, N, total_simulations, workers):
 	if total_simulations % workers != 0:
-		total_simulations = total_simulations + (workers - total_simulations % workers)
+		total_simulations += (workers - total_simulations % workers)
 		print(f"Total number of simulations adjusted to {total_simulations} to be evenly divisible by {workers} workers.")
 	worker_simulations = int(total_simulations/workers)
 	worker_commands = [S, K, r, sigma, q, T, H, N, worker_simulations, total_simulations]

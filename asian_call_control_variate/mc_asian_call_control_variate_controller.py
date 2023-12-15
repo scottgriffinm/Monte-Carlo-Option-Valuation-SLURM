@@ -18,7 +18,7 @@ def geometric_asian_call(S, K, sigma, r, q, T, N):
 
 def mc_asian_call_control_variate_controller(S, K, r, sigma, q, T, total_simulations, workers):
 	if total_simulations % workers != 0:
-		total_simulations = total_simulations + (workers - total_simulations % workers)
+		total_simulations += (workers - total_simulations % workers)
 		print(f"Total number of simulations adjusted to {total_simulations} to be evenly divisible by {workers} workers.")
 	worker_simulations = int(total_simulations/workers)
 	worker_commands = [S, K, sigma, r, q, T, N, worker_simulations, total_simulations]
