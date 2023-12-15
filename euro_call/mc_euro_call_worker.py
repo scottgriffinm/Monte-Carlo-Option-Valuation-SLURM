@@ -9,7 +9,7 @@ def mc_euro_call_worker(S, K, r, sigma, q, T, worker_simulations, total_simulati
     sum_call = 0
     sum_call_change = 0
     sum_pathwise = 0
-    random_numbers = np.random.randn(total_simulations)
+    random_numbers = np.random.randn(worker_simulations)
     for i in range(worker_simulations):
         log_st = np.log(S) + drift + sig_sqrt_t * random_numbers[i]
         call_val = max(0, np.exp(log_st) - K)

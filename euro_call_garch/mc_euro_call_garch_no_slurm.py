@@ -34,7 +34,6 @@ if __name__ == "__main__":
 	theta = sigma0  
 	lambda_ = 0.6
 	M = 1000000
-
 	print("mc euro call w/ garch = ", mc_euro_call_garch(S, K, r, sigma0, q, T, N, kappa, theta, lambda_, M))
 
 
