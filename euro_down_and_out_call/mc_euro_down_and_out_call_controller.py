@@ -19,17 +19,17 @@ def mc_euro_down_and_out_call_controller(S, K, r, sigma, q, T, H, N, total_simul
 	return np.exp(-r * T) * sum_call
 
 if __name__ == "__main__":   
+	S = 100
 	K = 100
 	T = 1
-	S = 100
 	sigma = 0.2
 	r = 0.06
 	q = 0.03
 	H = 99
 	N = 10
-	total_simulations = 10000000
-	workers = 4
+	total_simulations = 1_000_000
+	workers = 1
 	price = mc_euro_down_and_out_call_controller(S, K, r, sigma, q, T, H, N, total_simulations, workers)
-	print(f"\nWorkers = {workers}")
+	print(f"Workers = {workers}")
 	print(f"Total Simulations = {total_simulations}")
-	print(f"Price = {price}\worker_simulations")
+	print(f"Price = {price}")

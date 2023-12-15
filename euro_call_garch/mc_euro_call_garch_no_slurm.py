@@ -1,6 +1,6 @@
 import numpy as np
 
-def mc_euro_call_garch(S, K, r, sigma0, q, T, N, kappa, theta, lambda_, M):
+def mc_euro_call_garch(S, K, r, sigma0, q, T, N, kappa, theta, lambda_, total_simulations):
 	dt = T/N
 	Sqrdt = np.sqrt(dt)
 	a = kappa * theta
@@ -9,7 +9,7 @@ def mc_euro_call_garch(S, K, r, sigma0, q, T, N, kappa, theta, lambda_, M):
 	LogS0 = np.log(S)
 	SumCall = 0
 	SumCallSq = 0
-	for i in range(M):
+	for i in range(total_simulations):
 		LogS = LogS0
 		sigma = sigma0
 		for j in range(N):
@@ -19,7 +19,7 @@ def mc_euro_call_garch(S, K, r, sigma0, q, T, N, kappa, theta, lambda_, M):
 		CallV = max(0, np.exp(LogS) - K)
 		SumCall += CallV
 		SumCallSq += CallV**2
-	CallV = np.exp(-r * T) * SumCall/M
+	CallV = np.exp(-r * T) * SumCall/total_simulations
 	return CallV
 
 if __name__ == "__main__":
@@ -33,8 +33,9 @@ if __name__ == "__main__":
 	kappa = 0.1
 	theta = sigma0  
 	lambda_ = 0.6
-	M = 1000000
-	print("mc euro call w/ garch = ", mc_euro_call_garch(S, K, r, sigma0, q, T, N, kappa, theta, lambda_, M))
+	total_simulations = 1_000_000
+	print(f"Simulations = {total_simulations}")
+	print("Price =  ", mc_euro_call_garch(S, K, r, sigma0, q, T, N, kappa, theta, lambda_, total_simulations))
 
 
 

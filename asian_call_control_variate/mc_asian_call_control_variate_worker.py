@@ -20,7 +20,7 @@ def mc_asian_call_control_variate_worker(S, K, sigma, r, q, T, N, worker_simulat
 		G = productSt ** (1 / N)
 		CT = max(A - K, 0) - max(G - K, 0)
 		sum_CT = sum_CT + CT
-	return portfolio_value = sum_CT / total_simulations
+	return sum_CT / total_simulations
 
 if __name__ == "__main__":
     S = float(sys.argv[1])

@@ -45,8 +45,9 @@ if __name__ == "__main__":
 	r = 0.06
 	q = 0.03
 	N = 10
-	total_simulations = 100_000
-	print(mc_asian_call_control_variate(S, K, r, sigma, q, T, N, total_simulations))
+	total_simulations = 1_000_000
+	print(f"Total Simulations = {total_simulations}")
+	print("Price = ", mc_asian_call_control_variate(S, K, r, sigma, q, T, N, total_simulations))
 
 
 

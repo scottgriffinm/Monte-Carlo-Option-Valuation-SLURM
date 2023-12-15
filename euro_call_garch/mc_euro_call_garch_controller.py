@@ -30,9 +30,9 @@ if __name__ == "__main__":
 	kappa = 0.1
 	theta = sigma0  
 	lambda_ = 0.6
-	total_simulations = 10_000_000 
-	workers = 4
+	total_simulations = 1_000_000 
+	workers = 1
 	price = mc_euro_call_garch_controller(S, K, r, sigma0, q, T, N, kappa, theta, lambda_, total_simulations, workers)
-	print(f"\nWorkers = {workers}")
+	print(f"Workers = {workers}")
 	print(f"Total Simulations = {total_simulations}")
-	print(f"Price = {price}\worker_simulations")
+	print(f"Price = {price}")

@@ -25,12 +25,9 @@ if __name__ == "__main__":
     sigma = 0.2
     q = 0.01  	 
     T = 1   	 
-    total_simulations = 10_000_000 
-    workers = 4
+    total_simulations = 1_000_000
+    workers = 1
     price = mc_euro_call_controller(S, K, r, sigma, q, T, total_simulations, workers)
-    print(f"\nWorkers = {workers}")
+    print(f"Workers = {workers}")
     print(f"Total Simulations = {total_simulations}")
-    print(f"Price = {price}\worker_simulations")
-
-
-
+    print(f"Price = {price}")
