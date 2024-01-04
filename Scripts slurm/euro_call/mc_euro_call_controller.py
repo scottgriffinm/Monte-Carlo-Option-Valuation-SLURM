@@ -2,6 +2,19 @@ import numpy as np
 import subprocess
 
 def mc_euro_call_controller(S, K, r, sigma, q, T, total_simulations, workers):
+	'''Prices a European call option using Monte Carlo simulation. 
+	Utilizes a SLURM cluster. This script should be ran in the /home directory 
+	of the SLURM controller computer.
+
+	S: float, initial stock price
+	K: float, strike price
+	r: float, risk-free interest rate
+	sigma: float, volatility
+	q: float, dividend yield
+	T: int, time to maturity
+	total_simulations: int, total number of simulations
+	workers: int, number of workers to employ
+	'''
 	if total_simulations % workers != 0:
 		total_simulations += (workers - total_simulations % workers)
 		print(f"Total number of simulations adjusted to {total_simulations} to be evenly divisible by {workers} workers.")

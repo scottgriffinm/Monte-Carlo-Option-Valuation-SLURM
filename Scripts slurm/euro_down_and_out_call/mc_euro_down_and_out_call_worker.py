@@ -2,6 +2,8 @@ import numpy as np
 import sys
 
 def mc_euro_down_and_out_call_worker(S, K, r, sigma, q, T, H, N, worker_simulations, total_simulations):
+	'''Worker script for pricing a European down-and-out call option using Monte Carlo simulation.
+	This script should be located in the /home directory of all SLURM worker computers.'''
 	dt = T/N
 	nudt = (r - q - 0.5*sigma*sigma)*dt
 	sigsdt = sigma * np.sqrt(dt)
@@ -23,7 +25,7 @@ def mc_euro_down_and_out_call_worker(S, K, r, sigma, q, T, H, N, worker_simulati
 	return sum_CT/total_simulations
 
 if __name__ == "__main__":
-	S = float(sys.argv[1])
+	S = float(sys.argv[1]) # Collect arguments from srun command
 	K = float(sys.argv[2])
 	r = float(sys.argv[3])
 	sigma = float(sys.argv[4])

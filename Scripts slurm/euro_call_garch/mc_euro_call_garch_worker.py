@@ -23,7 +23,7 @@ def mc_euro_call_garch_worker(S, K, r, sigma0, q, T, N, kappa, theta, lambda_, w
 	return SumCall/total_simulations
 
 if __name__ == "__main__":
-    S = float(sys.argv[1])
+    S = float(sys.argv[1]) # Collect arguments from srun command
     K = float(sys.argv[2])
     r = float(sys.argv[3])
     sigma0 = float(sys.argv[4])

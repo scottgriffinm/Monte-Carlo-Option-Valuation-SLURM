@@ -2,6 +2,19 @@ import numpy as np
 import sys
 
 def mc_asian_call_control_variate_worker(S, K, sigma, r, q, T, N, worker_simulations, total_simulations):
+	'''Worker script for pricing an Asian call option using Monte Carlo simulation with a geometric
+	control variate. This script should be located in the /home directory of all SLURM worker computers.
+	
+	S: float, initial stock price
+	K: float, strike price
+	r: float, risk-free interest rate
+	sigma: float, volatility
+	q: float, dividend yield
+	T: int, time to maturity
+	N: int, number of monitoring points
+	worker_simulations: int, number of simulations to run on this worker
+	total_simulations: int, total number of simulations
+	'''
 	dt = T/N
 	nudt = (r - q - 0.5 * sigma * sigma) * dt
 	sigsdt = sigma * np.sqrt(dt)
@@ -23,7 +36,7 @@ def mc_asian_call_control_variate_worker(S, K, sigma, r, q, T, N, worker_simulat
 	return sum_CT / total_simulations
 
 if __name__ == "__main__":
-    S = float(sys.argv[1])
+    S = float(sys.argv[1]) # Collect arguments from srun command
     K = float(sys.argv[2])
     r = float(sys.argv[3])
     sigma = float(sys.argv[4])

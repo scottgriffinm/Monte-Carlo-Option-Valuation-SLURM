@@ -2,6 +2,19 @@ import numpy as np
 import sys
 
 def mc_euro_call_worker(S, K, r, sigma, q, T, worker_simulations, total_simulations):
+    '''
+    Worker script for pricing a European call option using Monte Carlo simulation.
+    This script should be located in the /home directory of all SLURM worker computers.
+    
+    S: float, initial stock price
+    K: float, strike price
+    r: float, risk-free interest rate
+    sigma: float, volatility
+    q: float, dividend yield
+    T: int, time to maturity
+    worker_simulations: int, number of simulations to run on this worker
+    total_simulations: int, total number of simulations
+    '''
     drift = (r - q - 0.5 * sigma**2) * T
     sig_sqrt_t = sigma * np.sqrt(T)
     up_change = np.log(1.01)
@@ -24,7 +37,7 @@ def mc_euro_call_worker(S, K, r, sigma, q, T, worker_simulations, total_simulati
     return sum_call/total_simulations
 
 if __name__ == "__main__":
-    S = float(sys.argv[1])
+    S = float(sys.argv[1]) # Collect arguments from srun command
     K = float(sys.argv[2])
     r = float(sys.argv[3])
     sigma = float(sys.argv[4])
