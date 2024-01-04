@@ -6,15 +6,18 @@ def mc_euro_call_garch_controller(S, K, r, sigma0, q, T, N, kappa, theta, lambda
 		total_simulations += (workers - total_simulations % workers)
 		print(f"Total number of simulations adjusted to {total_simulations} to be evenly divisible by {workers} workers.")
 	worker_simulations = int(total_simulations/workers)
+	# Build SLURM job command
 	worker_commands = [S, K, r, sigma0, q, T, N, kappa, theta, lambda_, worker_simulations, total_simulations]
 	command_list = ['srun', f"-N{workers}",'python3','mc_euro_call_garch_worker.py']
 	for i in range(len(worker_commands)):
 		command_list.append(str(worker_commands[i]))
+	# Launch SLURM job and collect results
 	result = subprocess.run(command_list, capture_output=True, text=True, check=True)
 	result = result.stdout.strip()
 	result = list(result.splitlines())
 	for i in range(len(result)):
 		result[i] = float(result[i])
+	# Sum values and discount to present time
 	sum_call = sum(result)
 	call_value = np.exp(-r * T) * sum_call
 	return call_value

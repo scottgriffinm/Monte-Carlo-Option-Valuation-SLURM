@@ -8,7 +8,7 @@ def mc_euro_down_and_out_call_worker(S, K, r, sigma, q, T, H, N, worker_simulati
 	nudt = (r - q - 0.5*sigma*sigma)*dt
 	sigsdt = sigma * np.sqrt(dt)
 	sum_CT = 0
-	for i in range(worker_simulations):
+	for i in range(worker_simulations): # Simulate asset paths
 		St = S
 		BARRIER_CROSSED = False
 		for j in range(N):
@@ -20,12 +20,13 @@ def mc_euro_down_and_out_call_worker(S, K, r, sigma, q, T, H, N, worker_simulati
 		if BARRIER_CROSSED:
 			CT = 0
 		else:
-			CT = np.maximum(0, St - K)
+			CT = np.maximum(0, St - K) 
 		sum_CT += CT
-	return sum_CT/total_simulations
+	return sum_CT/total_simulations # Average call value by total simulations
 
 if __name__ == "__main__":
-	S = float(sys.argv[1]) # Collect arguments from srun command
+	# Collect arguments from SLURM job command
+	S = float(sys.argv[1])
 	K = float(sys.argv[2])
 	r = float(sys.argv[3])
 	sigma = float(sys.argv[4])
@@ -35,6 +36,7 @@ if __name__ == "__main__":
 	N = int(sys.argv[8])
 	worker_simulations = int(sys.argv[9])
 	total_simulations = int(sys.argv[10])
+	# Return partial average payoff to controller computer
 	print(mc_euro_down_and_out_call_worker(S, K, r, sigma, q, T, H, N, worker_simulations, total_simulations))
 
 

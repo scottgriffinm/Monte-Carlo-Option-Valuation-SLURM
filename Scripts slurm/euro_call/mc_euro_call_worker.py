@@ -37,7 +37,8 @@ def mc_euro_call_worker(S, K, r, sigma, q, T, worker_simulations, total_simulati
     return sum_call/total_simulations
 
 if __name__ == "__main__":
-    S = float(sys.argv[1]) # Collect arguments from srun command
+    # Collect arguments from SLURM job command
+    S = float(sys.argv[1]) 
     K = float(sys.argv[2])
     r = float(sys.argv[3])
     sigma = float(sys.argv[4])
@@ -45,6 +46,7 @@ if __name__ == "__main__":
     T = int(sys.argv[6])
     worker_simulations = int(sys.argv[7])
     total_simulations = int(sys.argv[8])
+    # Return partial average payoff to controller computer
     print(mc_euro_call_worker(S, K, r, sigma, q, T, worker_simulations, total_simulations))
 
 

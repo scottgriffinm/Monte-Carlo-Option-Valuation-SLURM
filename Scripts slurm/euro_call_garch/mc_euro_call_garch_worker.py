@@ -23,7 +23,8 @@ def mc_euro_call_garch_worker(S, K, r, sigma0, q, T, N, kappa, theta, lambda_, w
 	return SumCall/total_simulations
 
 if __name__ == "__main__":
-    S = float(sys.argv[1]) # Collect arguments from srun command
+	# Collect arguments from SLURM job command
+    S = float(sys.argv[1])
     K = float(sys.argv[2])
     r = float(sys.argv[3])
     sigma0 = float(sys.argv[4])
@@ -35,6 +36,7 @@ if __name__ == "__main__":
     lambda_ = float(sys.argv[10])
     worker_simulations = int(sys.argv[11])
     total_simulations = int(sys.argv[12])
+	# Return partial average payoff to controller computer
     print(mc_euro_call_garch_worker(S, K, r, sigma0, q, T, N, kappa, theta, lambda_, worker_simulations, total_simulations))
 
 

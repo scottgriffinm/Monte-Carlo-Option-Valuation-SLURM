@@ -36,7 +36,8 @@ def mc_asian_call_control_variate_worker(S, K, sigma, r, q, T, N, worker_simulat
 	return sum_CT / total_simulations
 
 if __name__ == "__main__":
-    S = float(sys.argv[1]) # Collect arguments from srun command
+	# Collect arguments from SLURM job command
+    S = float(sys.argv[1]) 
     K = float(sys.argv[2])
     r = float(sys.argv[3])
     sigma = float(sys.argv[4])
@@ -45,6 +46,7 @@ if __name__ == "__main__":
     N = int(sys.argv[7])
     worker_simulations = int(sys.argv[8])
     total_simulations = int(sys.argv[9])
+	# Return partial average payoff to controller computer
     print(mc_asian_call_control_variate_worker(S, K, sigma, r, q, T, N, worker_simulations, total_simulations))
 
 
