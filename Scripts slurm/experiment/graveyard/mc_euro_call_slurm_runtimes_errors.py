@@ -1,10 +1,12 @@
-from time import time
 import numpy as np
+import subprocess
+from time import time
 from statistics import mean
 
-def mc_euro_call(S, K, r, sigma, q, T, M):
+def mc_euro_call_controller(S, K, r, sigma, q, T, M, workers):
 	'''
-	Computes the price of a European call option using Monte Carlo simulation.
+	Prices a European call option with Monte Carlo, utilizing a SLURM cluster. 
+	This function should be ran in the /home directory of the SLURM controller computer.
 
 	S: float, initial stock price
 	K: float, strike price
@@ -12,68 +14,63 @@ def mc_euro_call(S, K, r, sigma, q, T, M):
 	sigma: float, volatility
 	q: float, dividend yield
 	T: int, time to maturity in years
-	M: int, number of simulations
+	M: int, number ofa simulations
+	workers: int, number of worker computers to employ
 	'''
-	sum_call = 0
-	drift = (r - q - 0.5 * sigma**2) * T
-	sig_sqrt_t = sigma * np.sqrt(T)
-	up_change = np.log(1.01)
-	down_change = np.log(0.99)
-	sum_call = 0
-	sum_call_change = 0
-	sum_pathwise = 0
-	random_numbers = np.random.randn(M) # Precompute random numbers
-	for i in range(M): # Simulate M asset paths
-		log_st = np.log(S) + drift + sig_sqrt_t * random_numbers[i]
-		call_val = max(0, np.exp(log_st) - K)
-		sum_call += call_val
-		log_su = log_st + up_change
-		call_vu = max(0, np.exp(log_su) - K)
-		log_sd = log_st + down_change
-		call_vd = max(0, np.exp(log_sd) - K)
-		sum_call_change += call_vu - call_vd
-		if np.exp(log_st) > K:
-			sum_pathwise += (np.exp(log_st) / S)
-	# Discount average call value to present time	
-	call_value = np.exp(-r * T) * sum_call/M 
+	if M % workers != 0:
+		M = M + (workers - M % workers)
+		print(f"M adjusted to {M} to be evenly divisible by {workers} workers.")
+	n = int(M/workers)
+	# Build SLURM job command
+	command_list = ['srun', f"-N{workers}",'python3','mc_euro_call_partial.py', str(S), str(K), str(r), str(sigma), str(q), str(T), str(n), str(M)]
+	# Launch SLURM job and collect results
+	result = subprocess.run(command_list, capture_output=True, text=True, check=True)
+	result = result.stdout.strip()
+	result = list(result.splitlines())
+	for i in range(len(result)):
+		result[i] = float(result[i])
+	# Sum values and discount to present time
+	sum_call = sum(result)
+	call_value = np.exp(-r * T) * sum_call
 	return call_value
 
-
 if __name__ == "__main__":
-	# Option parameters
-	S = 110   
+    # Option parameters
+	S = 100   
 	K = 100      
 	r = 0.05     
 	sigma = 0.2 
 	q = 0.01       
 	T = 1
 
-	# Average runtime and average price error experiment
+    # Average runtime and average price error experiment
 	M = 100000000 # Number of simulations
+	workers = 4 # Number of workers to employ
 	bs_price = 16.79983686 # Black-Scholes price to compare to
 	runs = 10 # Number of runs to average over
 	average_runtime = 0
 	runtimes = []
 	prices = []
 	for i in range(runs):
-		print(f"\nrun {i}/{runs}")
+		print(f"run {i}/{runs}")
 		start = time()	
-		price = mc_euro_call(S, K, r, sigma, q, T, M)
+		price = mc_euro_call_controller(S, K, r, sigma, q, T, M, workers)
 		end = time()
 		runtime = end-start
 		runtimes.append(runtime)
 		prices.append(price)
 		average_runtime += runtime/runs		
+		print(f"\nworkers = {workers}")
 		print(f"sims = {M}")
 		print(f"price = {price}")
 		print(f"time = {round(runtime,6)} seconds")
 		print(f"running_average = {round((average_runtime*runs)/(i+1),6)}")
-
+		
 	# Calculate and print results
 	average_runtime = round(mean(runtimes),5)
 	average_error = float(round(abs(mean(prices)-bs_price),5))
 	print("---------------------------------------------------")
-	print(f"\nsingle, independent computer")
+	print(f"\nworkers = {workers}")
 	print(f"sims = {M}")
 	print(f"\nRUNTIMES")
 	for i in range(len(runtimes)):
@@ -83,8 +80,3 @@ if __name__ == "__main__":
 		print(f"run {i}, {prices[i]}")
 	print(f"\nAVERAGE RUNTIME = {average_runtime}")
 	print(f"AVERAGE ERROR = {average_error}")
-	
-	
-	
-
-

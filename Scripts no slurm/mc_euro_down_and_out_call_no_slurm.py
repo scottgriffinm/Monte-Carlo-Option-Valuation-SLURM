@@ -1,10 +1,27 @@
 import numpy as np
 
+'''Single, independent computer script for pricing a European down-and-out 
+call option using Monte Carlo simulation.'''
+
 def mc_euro_down_and_out_call(S, K, r, sigma, q, T, H, N, total_simulations):
-	dt = T/N
+	'''Prices a European down-and-out call option using Monte Carlo 
+	simulation.
+	
+	S: float, initial stock price
+	K: float, strike price
+	r: float, risk-free interest rate
+	sigma: float, volatility
+	q: float, dividend yield
+	T: int, time to maturity
+	H: float, barrier price
+	N: int, number of monitoring points
+	total_simulations: int, total number of simulations'''
+	# Precompute constants
+	dt = T/N 
 	nudt = (r - q - 0.5*sigma*sigma)*dt
 	sigsdt = sigma * np.sqrt(dt)
 	sum_CT = 0
+	# Simulate asset paths
 	for i in range(total_simulations):
 		St = S
 		BARRIER_CROSSED = False
@@ -19,9 +36,12 @@ def mc_euro_down_and_out_call(S, K, r, sigma, q, T, H, N, total_simulations):
 		else:
 			CT = np.maximum(0, St - K)
 		sum_CT += CT
-	return sum_CT/total_simulations*np.exp(-r*T)			
+	# Average call value and discount to present time
+	call_value = sum_CT/total_simulations*np.exp(-r*T)	
+	return call_value
 
 if __name__ == "__main__":
+	# Example usage
 	K = 100
 	T = 1
 	S = 100

@@ -1,10 +1,13 @@
 import numpy as np
 import subprocess
 
+'''Controller computer script for pricing a European down-and-out call option using 
+Monte Carlo simulation. This script should be ran in the /home directory of the 
+SLURM controller computer.'''
+
 def mc_euro_down_and_out_call_controller(S, K, r, sigma, q, T, H, N, total_simulations, workers):
-	'''Prices a European down-and-out call option using Monte Carlo simulation.
-	Utillizes a SLURM cluster. This script should be ran in the /home directory of the
-	SLURM controller computer.
+	'''Controller computer function for pricing a European down-and-out call option using 
+	Monte Carlo simulation. 
 	
 	S: float, initial stock price
 	K: float, strike price
@@ -37,7 +40,7 @@ def mc_euro_down_and_out_call_controller(S, K, r, sigma, q, T, H, N, total_simul
 	return call_value
 
 if __name__ == "__main__":  
-	# Initialize option parameters 
+	# Example usage
 	S = 100
 	K = 100
 	T = 1
@@ -46,7 +49,6 @@ if __name__ == "__main__":
 	q = 0.03
 	H = 99
 	N = 10
-	# Price option
 	total_simulations = 1_000_000
 	workers = 1
 	price = mc_euro_down_and_out_call_controller(S, K, r, sigma, q, T, H, N, total_simulations, workers)

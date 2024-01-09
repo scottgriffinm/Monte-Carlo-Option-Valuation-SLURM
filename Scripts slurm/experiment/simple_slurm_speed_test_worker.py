@@ -1,7 +1,8 @@
 import numpy as np
 import sys
 
-'''Worker computer script for calculating the average of a number of random numbers.'''
+'''Worker computer script for calculating the average of a number of random numbers.
+This script should be located in the \home directory of all SLURM worker computers.'''
 
 if __name__ == "__main__":
 	# Collect runs argument from SLURM job command

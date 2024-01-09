@@ -1,7 +1,8 @@
 import subprocess
 from time import time
 
-'''Controller computer script for calculating the average of a number of random numbers.'''
+'''Controller computer script for calculating the average of a number of random numbers.
+This script should be run in the \home directory of the SLURM controller computer.'''
 
 if __name__ == "__main__":
 	start = time()	# Start timer
